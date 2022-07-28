@@ -1,0 +1,51 @@
+//CHALLENGE 1//
+const surprisingFact = "The bumblebee bat is the world's smallest mammal";
+
+console.log('Surprising Fact:', surprisingFact);
+console.log('Surprising Fact: %s', surprisingFact);
+
+
+
+
+//CHALLENGE 2//
+const familyTree = [
+    {
+      name: "Person 1",
+      children: [
+        {
+          name: "Person 2",
+          children: [
+            {
+              name: "Person 3",
+              children: [
+                {
+                  name: "Person 4",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
+console.log(JSON.stringify(familyTree, null, 2));
+console.dir(familyTree, {depth: null});
+
+
+
+
+//CHALLENGE 3//
+function importantTask() {
+    console.count();
+}
+
+importantTask();
+importantTask();
+importantTask();
+importantTask();
+
+console.countReset()
+
+importantTask();
+importantTask();
