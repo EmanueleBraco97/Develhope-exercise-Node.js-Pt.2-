@@ -6,7 +6,7 @@ app.get('/', (request, response) => {
     response.status(200);
 })
 
-const port = 3000;
+const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`[Server]: Server running at http://localhost:${port}`)

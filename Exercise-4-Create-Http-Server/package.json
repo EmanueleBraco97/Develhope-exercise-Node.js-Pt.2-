@@ -2,9 +2,10 @@
   "name": "exercise-4-create-http-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -15,8 +16,10 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-error": "^0.0.2",
+    "nodemon": "^2.0.19",
     "supertest": "^6.2.4"
   }
 }
