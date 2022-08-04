@@ -26,7 +26,52 @@ describe("GET /users", () => {
 
         expect(response.body).toEqual(users);
     });
-})
+});
+
+describe("GET /user/:id", () => {
+    test("Valid request", async () => {
+        const user = {
+            id: 1,
+            name: "emanuele",
+            surname: 'braco',
+            role: 'student'
+        };
+
+        //@ts-ignore
+        prismaMock.user.findUnique.mockResolvedValue(user);
+
+        const response = await request
+            .get("/users/1")
+            .expect(200)
+            .expect("Content-Type", /application\/json/);
+
+        expect(response.body).toEqual(user);
+    });
+
+    // test("User does not exist", async () => {
+    //     //@ts-ignore
+    //     prismaMock.user.findUnique.mockResolvedValue(null);
+
+    //     const response = await request
+    //         .get("/users/23")
+    //         .expect(404)
+    //         .expect("Content-Type", /text\/html/);
+
+    //     expect(response.text).toContain("Cannot GET /users/23");
+    // });
+
+
+    test("Invalid user ID", async () => {
+        const response = await request
+            .get("/users/abcd")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot GET /users/abcd");
+    });
+
+});
+
 
 
 
