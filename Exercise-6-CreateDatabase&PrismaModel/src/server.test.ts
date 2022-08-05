@@ -3,6 +3,7 @@ import supertest from 'supertest';
 import {prismaMock} from "./lib/prisma/client.mock";
 
 import app from './app';
+import { json } from 'stream/consumers';
 
 const request = supertest(app);
 
@@ -28,7 +29,7 @@ describe("GET /users", () => {
     });
 });
 
-describe("GET /user/:id", () => {
+describe("GET /users/:id", () => {
     test("Valid request", async () => {
         const user = {
             id: 1,
@@ -48,17 +49,17 @@ describe("GET /user/:id", () => {
         expect(response.body).toEqual(user);
     });
 
-    // test("User does not exist", async () => {
-    //     //@ts-ignore
-    //     prismaMock.user.findUnique.mockResolvedValue(null);
+    test("User does not exist", async () => {
+        //@ts-ignore
+        prismaMock.user.findUnique.mockResolvedValue(null);
 
-    //     const response = await request
-    //         .get("/users/23")
-    //         .expect(404)
-    //         .expect("Content-Type", /text\/html/);
+        const response = await request
+            .get("/users/23")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
 
-    //     expect(response.text).toContain("Cannot GET /users/23");
-    // });
+        expect(response.text).toContain("Cannot GET /users/23");
+    });
 
 
     test("Invalid user ID", async () => {
@@ -86,7 +87,7 @@ describe("POST /users", () => {
 
         const response = await request
             .post('/users')
-            .send(user)
+            .send(JSON.stringify(user))
             .expect(201)
             .expect('Content-Type', /application\/json/)
 
