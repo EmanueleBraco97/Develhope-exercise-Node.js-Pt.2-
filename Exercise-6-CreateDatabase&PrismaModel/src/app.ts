@@ -101,10 +101,23 @@ app.post("/users/:id(\\d+)/photo",
             return next("No photo file Uploaded")
         }
 
+        const userId = Number(request.params.id);
         const photoFilename = request.file.filename;
 
-        response.status(201).json({photoFilename});
+        try{
+            await prisma.user.update({
+                where: {id: userId},
+                data:  {photoFilename}
+            });
+
+            response.status(201).json({photoFilename})
+        } catch(error) {
+            response.status(404);
+            next(`Cannot POST /users/${userId}/photo`)
+        }
 });
+
+app.use("/users/photos", express.static("uploads"));
 
 app.use(ValidationErrorMiddleware);
 
