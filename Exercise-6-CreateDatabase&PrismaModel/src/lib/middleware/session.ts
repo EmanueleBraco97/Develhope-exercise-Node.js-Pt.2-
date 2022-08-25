@@ -5,6 +5,7 @@ import session from "express-session";
 import config from "../../config";
 
 export function initSessionMiddleware(appEnvironment: string) {
+
     const isProduction = appEnvironment === "production";
 
     return session({

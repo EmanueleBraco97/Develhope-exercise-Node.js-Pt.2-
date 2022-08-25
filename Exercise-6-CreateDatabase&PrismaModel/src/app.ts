@@ -15,7 +15,7 @@ import authRoutes from './routes/auth';
 
 const app = express();
 
-app.use(initSessionMiddleware(app.get('env')));
+app.use(initSessionMiddleware (app.get('env')));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -25,7 +25,7 @@ app.use(initCorsMiddleware());
 
 app.use('/users', usersRoutes);
 app.use('/auth', authRoutes);
-app.use(notFoundMiddleware);
+app.use(notFoundMiddleware) ;
 
 app.use(ValidationErrorMiddleware);
 app.use(initErrorMiddleware(app.get('env')));
