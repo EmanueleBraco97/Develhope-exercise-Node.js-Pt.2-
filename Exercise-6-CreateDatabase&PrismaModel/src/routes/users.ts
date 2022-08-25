@@ -8,6 +8,8 @@ import {
     UserData
 } from "../lib/middleware/validation";
 
+import { checkAuthoritazion } from "../lib/middleware/passport";
+
 import { initMulterMiddleware } from '../lib/middleware/multer';
 
 const upload = initMulterMiddleware();
@@ -29,38 +31,47 @@ router.get("/:id(\\d+)", async (request, response,next) => {
 
     if(!user){
         response.status(404);
-        return next(`Cannot GET /planets/${userId}`)
+        return next(`Cannot GET /users/${userId}`)
     };
 
     response.json(user);
 });
 
-router.get("/", async(request,response) => {
-    const users = await prisma.user.findMany();
+// router.get("/", async(request,response) => {
+//     const users = await prisma.user.findMany();
 
-    response.json(users);
-})
+//     response.json(users);
+// })
 
-router.post("/", validate({body: userSchema}), async(request,response) => {
+router.post("/", checkAuthoritazion, validate({body: userSchema}), async(request,response) => {
     const userData: UserData = request.body;
+    const username = request.user?.username as string;
 
     const user = await prisma.user.create({
-        data: userData
-    })
+        data: {
+            ...userData,
+            createdBy: username,
+            updatedBy: username,
+        }
+    });
 
     response.status(201).json(user);
 });
 
 
-router.put("/:id(\\d+)", validate({body: userSchema}), async(request,response,next) => {
-    const userId = Number(request.params.id)
+router.put("/:id(\\d+)", checkAuthoritazion, validate({body: userSchema}), async(request,response,next) => {
+    const userId = Number(request.params.id);
     const userData: UserData = request.body;
+    const username = request.user?.username as string;
 
     try{
         const user = await prisma.user.update({
             where: {id: userId},
-            data: userData
-        })
+            data: {
+                ...userData,
+                updatedBy: username,
+            }
+        });
 
         response.status(200).json(user);
     }catch(error){
@@ -70,7 +81,7 @@ router.put("/:id(\\d+)", validate({body: userSchema}), async(request,response,ne
 });
 
 
-router.delete("/:id(\\d+)", async(request,response,next) => {
+router.delete("/:id(\\d+)", checkAuthoritazion, async(request,response,next) => {
     const userId = Number(request.params.id);
 
     try{
