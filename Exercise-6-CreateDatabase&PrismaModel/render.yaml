@@ -1,0 +1,8 @@
+---
+services:
+- type: web
+  name: nodetest
+  env: node
+  repo: https://github.com/EmanueleBraco97/Develhope-exercise-Node.js-pt.2-
+  buildCommand: npm ci && npm run build
+  startCommand: 'true'
